@@ -1,7 +1,7 @@
 {
     "name": "czigor/tinsight-php",
     "type": "library",
-    "keywords": ["tinsight","Transportation Insight", "php"],
+    "keywords": ["tinsight","Transportation Insight"],
     "homepage": "https://github.com/czigor/tinsight-php",
     "description": "PHP wrapper library for the Transportation Insight API.",
     "license": "GNU",
