@@ -10,7 +10,7 @@
         "ext-curl": "*"
     },
     "autoload": {
-        "psr-4": { "Czigor\\Tinsight": "src" }
+        "psr-4": { "Czigor\\Tinsight\\": "src" }
     },
     "authors": [
         {
