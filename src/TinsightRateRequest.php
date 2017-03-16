@@ -176,7 +176,7 @@ class TinsightRateRequest extends TinsightRequestBase {
   }
 
   /**
-   * handlingUnit getter.
+   * handlingUnits getter.
    *
    * @return array
    */
@@ -185,7 +185,7 @@ class TinsightRateRequest extends TinsightRequestBase {
   }
 
   /**
-   * handlingUnit setter.
+   * handlingUnits setter.
    *
    * @param array $handlingUnit
    */
@@ -194,21 +194,21 @@ class TinsightRateRequest extends TinsightRequestBase {
   }
 
   /**
-   * event getter.
+   * events getter.
    *
    * @return array
    */
-  public function getEvent() {
-    return $this->event;
+  public function getEvents() {
+    return $this->events;
   }
 
   /**
-   * event setter.
+   * events setter.
    *
    * @param array $event
    */
-  public function setEvent(array $event) {
-    $this->event = $event;
+  public function setEvents(array $events) {
+    $this->events = $events;
   }
 
 }
