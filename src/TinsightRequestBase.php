@@ -9,41 +9,32 @@ abstract class TinsightRequestBase {
 
   protected $live = FALSE;
 
-  protected $username = '';
+  protected $credentials;
 
-  protected $password = '';
+  protected $requestType;
 
-  protected $id = '';
-
-  protected $token = '';
-
-  protected $requestType = 'rate';
-
-  public function __construct($live = FALSE, $credentials = []) {
+  public function __construct($live = FALSE, TinsightCredentialsInterface $credentials, $request_type = 'rate') {
     $this->live = $live;
-    $this->username = empty($credentials['username']) ? '' : $credentials['username'];
-    $this->password = empty($credentials['password']) ? '' : $credentials['password'];
-    $this->id = empty($credentials['id']) ? '' : $credentials['id'];
-    $this->token = empty($credentials['token']) ? '' : $credentials['token'];
+    $this->credentials = $credentials;
     $this->requestType = $request_type;
   }
 
-  public function requestXml() {
+  protected function requestXml() {
     $writer = new XMLWriter();
     $writer->openMemory();
     $writer->setIndent(2);
     $writer->startElement('requests');
-    if (!empty($this->username)) {
-      $writer->writeAttribute('username', $this->username);
+    if (!empty($this->credentials->username)) {
+      $writer->writeAttribute('username', $this->credentials->username);
     }
-    if (!empty($this->password)) {
-      $writer->writeAttribute('password', $this->password);
+    if (!empty($this->credentials->password)) {
+      $writer->writeAttribute('password', $this->credentials->password);
     }
-    if (!empty($this->id)) {
-      $writer->writeAttribute('id', $this->id);
+    if (!empty($this->credentials->id)) {
+      $writer->writeAttribute('id', $this->credentials->id);
     }
-    if (!empty($this->token0)) {
-      $writer->writeAttribute('token', $this->token);
+    if (!empty($this->credentials->token)) {
+      $writer->writeAttribute('token', $this->credentials->token);
     }
     $writer->startElement('request');
     $writer->writeAttribute('service', $this->requestType);
@@ -54,9 +45,19 @@ abstract class TinsightRequestBase {
     return $writer->flush();
   }
 
+  /**
+   * Produce the request body.
+   *
+   * @param XMLWriter $writer
+   */
   protected function requestBodyXml(XMLWriter $writer) {}
 
-  protected function sendRequest() {
+  /**
+   * Send the request to T-Insight.
+   *
+   * @return mixed
+   */
+  public function sendRequest() {
     $options = [
       CURLOPT_URL => $this->live ? TINSIGHT_LIVE_REQUEST_URL : TINSIGHT_TEST_REQUEST_URL,
       CURLOPT_POST => TRUE,
@@ -67,6 +68,7 @@ abstract class TinsightRequestBase {
     curl_setopt_array($ch, $options);
     $output = curl_exec($ch);
     curl_close($ch);
+    return $output;
   }
 
 }
