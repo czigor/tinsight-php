@@ -180,8 +180,8 @@ class TinsightRateRequest extends TinsightRequestBase {
    *
    * @return array
    */
-  public function getHandlingUnit() {
-    return $this->handlingUnit;
+  public function getHandlingUnits() {
+    return $this->handlingUnits;
   }
 
   /**
@@ -189,8 +189,8 @@ class TinsightRateRequest extends TinsightRequestBase {
    *
    * @param array $handlingUnit
    */
-  public function setHandlingUnit(array $handlingUnit) {
-    $this->handlingUnit = $handlingUnit;
+  public function setHandlingUnits(array $handlingUnits) {
+    $this->handlingUnits = $handlingUnits;
   }
 
   /**
