@@ -4,14 +4,6 @@ namespace Czigor\Tinsight;
 
 interface TinsightCredentialsInterface {
 
-  protected $username = '';
-
-  protected $password = '';
-
-  protected $id = '';
-
-  protected $token = '';
-
   /**
    * Username getter.
    */

@@ -80,11 +80,11 @@ class TinsightRateRequest extends TinsightRequestBase {
   /**
    * @inheritdoc
    */
-  protected function requestBodyXml(XMLWriter $writer) {
+  protected function requestBodyXml(\XMLWriter $writer) {
     $writer->startElement('RateRequest');
     $writer->writeElement('uoneNumber', $this->uoneNumber);
     $writer->startElement('HandlingUnits');
-    foreach ($this->handlinUnits as $handling_unit) {
+    foreach ($this->handlingUnits as $handling_unit) {
       $writer->startElement('HandlingUnit');
       $writer->writeAttribute('stackable', $handling_unit['stackable']);
 
@@ -171,7 +171,7 @@ class TinsightRateRequest extends TinsightRequestBase {
    *
    * @param string $uoneNumber
    */
-  public function setUoneNumber(string $uoneNumber) {
+  public function setUoneNumber($uoneNumber) {
     $this->uoneNumber = $uoneNumber;
   }
 
