@@ -34,7 +34,8 @@ class TinsightRateRequest extends TinsightRequestBase {
    * - 'Dimensions-width' - Decimal. Attribute contains width measurement of
    *   HandlingUnit.
    * - 'Dimensions-length' - Decimal. Attribute contains length measurement of
-   *   HandlingUnit. (@todo units?)
+   *   HandlingUnit.
+   * - 'Dimensions-units' - string. The unit of dimensions.
    * - 'Items' - An indexed array of arrays. The arrays can have the following
    *   keys:
    *   - 'freightClass' - Decimal. Freight class specific to item.
@@ -47,6 +48,7 @@ class TinsightRateRequest extends TinsightRequestBase {
    *     item.
    *   - 'Dimensions-length' - Decimal. Attribute contains length measurement of
    *     item.
+   *   - 'Dimensions-units' - string. The unit of dimensions.
    *   - 'Quantity' - Decimal. Count of units within item.
    *
    * @var array
@@ -57,7 +59,7 @@ class TinsightRateRequest extends TinsightRequestBase {
    * An indexed array of Event arrays.
    *
    * An Event array can have the following keys:
-   * - 'date' - Date of event. (@todo In what format?)
+   * - 'date' - Date of event in 'mm/dd/yy hh:mm' format.
    * - 'type' - String. Either 'Pickup' or 'Drop'.
    * - 'sequence' - Numeric. Event sequence.
    * - 'City' - String. City of event location.
@@ -188,24 +190,6 @@ class TinsightRateRequest extends TinsightRequestBase {
     // End RateRequest.
     $writer->endElement();
 
-  }
-
-  /**
-   * uoneNumber getter.
-   *
-   * @return string
-   */
-  public function getUoneNumber() {
-    return $this->uoneNumber;
-  }
-
-  /**
-   * uoneNumber setter.
-   *
-   * @param string $uoneNumber
-   */
-  public function setUoneNumber($uoneNumber) {
-    $this->uoneNumber = $uoneNumber;
   }
 
   /**
