@@ -24,18 +24,10 @@ abstract class TinsightRequestBase {
     $writer->openMemory();
     $writer->setIndent(2);
     $writer->startElement('requests');
-    if (!empty($this->credentials->username)) {
-      $writer->writeAttribute('username', $this->credentials->username);
-    }
-    if (!empty($this->credentials->password)) {
-      $writer->writeAttribute('password', $this->credentials->password);
-    }
-    if (!empty($this->credentials->id)) {
-      $writer->writeAttribute('id', $this->credentials->id);
-    }
-    if (!empty($this->credentials->token)) {
-      $writer->writeAttribute('token', $this->credentials->token);
-    }
+    $writer->writeAttribute('username', $this->credentials->getUsername());
+    $writer->writeAttribute('password', $this->credentials->getPassword());
+    $writer->writeAttribute('id', $this->credentials->getId());
+    $writer->writeAttribute('token', $this->credentials->getToken());
     $writer->startElement('request');
     $writer->writeAttribute('service', $this->requestType);
     $this->requestBodyXml($writer);
@@ -63,10 +55,14 @@ abstract class TinsightRequestBase {
       CURLOPT_POST => 1,
       CURLOPT_POSTFIELDS => $this->requestXml(),
       CURLOPT_RETURNTRANSFER => TRUE,
+      CURLOPT_SSL_VERIFYHOST =>  FALSE,
+      CURLOPT_SSL_VERIFYPEER =>  FALSE,
     ];
     $ch = curl_init();
     curl_setopt_array($ch, $options);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
     $output = curl_exec($ch);
+    $error = curl_error($ch);
     curl_close($ch);
     return $output;
   }
