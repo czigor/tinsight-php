@@ -59,7 +59,7 @@ class TinsightRateRequest extends TinsightRequestBase {
    * An indexed array of Event arrays.
    *
    * An Event array can have the following keys:
-   * - 'date' - Date of event in 'mm/dd/yy hh:mm' format.
+   * - 'date' - Date of event in 'mm/dd/yyyy hh:mm' format.
    * - 'type' - String. Either 'Pickup' or 'Drop'.
    * - 'sequence' - Numeric. Event sequence.
    * - 'City' - String. City of event location.
