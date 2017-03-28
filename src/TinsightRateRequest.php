@@ -74,7 +74,7 @@ class TinsightRateRequest extends TinsightRequestBase {
 
   public function __construct($live = FALSE, $credentials = []) {
     parent::__construct($live, $credentials);
-    $this->requestType = 'rate';
+    $this->requestType = 'RateRequest';
   }
 
   /**
@@ -82,22 +82,41 @@ class TinsightRateRequest extends TinsightRequestBase {
    */
   protected function requestBodyXml(\XMLWriter $writer) {
     $writer->startElement('RateRequest');
-    $writer->writeElement('uoneNumber', $this->uoneNumber);
+    $writer->writeAttribute('unitPricing','false');
+
+    $writer->startElement('RatingLevel');
+    $writer->writeAttribute('isCompanyAccountNumber','true');
+    $writer->text($this->credentials->getUsername());
+    $writer->endElement();
+
+    $writer->startElement('Constraints');
+    $writer->writeElement('Contract');
+    $writer->writeElement('Carrier');
+    $writer->writeElement('Mode');
+    $writer->writeElement('ServiceFlags');
+    $writer->endElement();
+
     $writer->startElement('HandlingUnits');
     foreach ($this->handlingUnits as $handling_unit) {
       $writer->startElement('HandlingUnit');
-      $writer->writeAttribute('stackable', $handling_unit['stackable']);
+      $writer->writeAttribute('stackable', $handling_unit['stackable'] ? 'true' : 'false');
 
-      $writer->writeElement('Quantity', $handling_unit['Quantity']);
+      $writer->startElement('Quantity');
       $writer->writeAttribute('units', $handling_unit['Quantity-units']);
+      $writer->text($handling_unit['Quantity']);
+      $writer->endElement();
 
-      $writer->writeElement('Weight', $handling_unit['Weight']);
+      $writer->startElement('Weight');
       $writer->writeAttribute('units', $handling_unit['Weight-units']);
+      $writer->text($handling_unit['Weight']);
+      $writer->endElement();
 
-      $writer->writeElement('Dimensions');
+      $writer->startElement('Dimensions');
       $writer->writeAttribute('height', $handling_unit['Dimensions-height']);
       $writer->writeAttribute('width', $handling_unit['Dimensions-width']);
       $writer->writeAttribute('length', $handling_unit['Dimensions-length']);
+      $writer->writeAttribute('units', $handling_unit['Dimensions-units']);
+      $writer->endElement();
 
       $writer->startElement('Items');
       foreach ($handling_unit['Items'] as $item) {
@@ -105,15 +124,22 @@ class TinsightRateRequest extends TinsightRequestBase {
         $writer->writeAttribute('freightClass', $item['freightClass']);
         $writer->writeAttribute('sequence', $item['sequence']);
 
-        $writer->writeElement('Weight', $item['Weight']);
+        $writer->startElement('Weight');
         $writer->writeAttribute('units', $item['Weight-units']);
+        $writer->text($item['Weight']);
+        $writer->endElement();
 
-        $writer->writeElement('Dimensions');
+        $writer->startElement('Dimensions');
         $writer->writeAttribute('height', $item['Dimensions-height']);
         $writer->writeAttribute('width', $item['Dimensions-width']);
         $writer->writeAttribute('length', $item['Dimensions-length']);
+        $writer->writeAttribute('units', $item['Dimensions-units']);
+        $writer->endElement();
 
-        $writer->writeElement('Quantity', $item['Quantity']);
+        $writer->startElement('Quantity');
+        $writer->writeAttribute('units', $item['Quantity-units']);
+        $writer->text($item['Quantity']);
+        $writer->endElement();
 
         // End Item.
         $writer->endElement();
