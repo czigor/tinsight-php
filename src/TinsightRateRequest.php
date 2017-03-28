@@ -84,17 +84,24 @@ class TinsightRateRequest extends TinsightRequestBase {
     $writer->startElement('RateRequest');
     $writer->writeAttribute('unitPricing','false');
 
-    $writer->startElement('RatingLevel');
-    $writer->writeAttribute('isCompanyAccountNumber','true');
-    $writer->text($this->credentials->getUsername());
-    $writer->endElement();
+    $writer->writeElement('uoneNumber', $this->credentials->getUsername());
 
     $writer->startElement('Constraints');
     $writer->writeElement('Contract');
     $writer->writeElement('Carrier');
     $writer->writeElement('Mode');
-    $writer->writeElement('ServiceFlags');
+
+    $writer->startElement('ServiceFlags');
+    $writer->startElement('ServiceFlag');
+    $writer->writeAttribute('code', 'LIFT');
+    $writer->text('Liftage Service');
     $writer->endElement();
+    $writer->endElement();
+
+    // End Constraints.
+    $writer->endElement();
+
+    $writer->writeElement('PaymentTerms', 'Prepaid');
 
     $writer->startElement('HandlingUnits');
     foreach ($this->handlingUnits as $handling_unit) {
