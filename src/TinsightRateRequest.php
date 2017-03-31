@@ -9,14 +9,6 @@ use Czigor\Tinsight\TinsightRequestBase;
  */
 class TinsightRateRequest extends TinsightRequestBase {
 
-
-  /**
-   * Customer account number to apply during processing.
-   *
-   * @var string
-   */
-  protected $uoneNumber = '';
-
   /**
    * An indexed array of handlingUnit arrays.
    *
@@ -85,8 +77,6 @@ class TinsightRateRequest extends TinsightRequestBase {
   protected function requestBodyXml(\XMLWriter $writer) {
     $writer->startElement('RateRequest');
     $writer->writeAttribute('unitPricing','false');
-
-    $writer->writeElement('uoneNumber', $this->credentials->getUsername());
 
     $writer->startElement('Constraints');
     $writer->writeElement('Contract');
