@@ -96,7 +96,6 @@ class TinsightRateRequest extends TinsightRequestBase {
     $writer->startElement('ServiceFlags');
     $writer->startElement('ServiceFlag');
     $writer->writeAttribute('code', 'LIFT');
-    $writer->text('Liftage Service');
     $writer->endElement();
     $writer->endElement();
 
