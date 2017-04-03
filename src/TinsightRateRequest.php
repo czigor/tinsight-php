@@ -65,8 +65,15 @@ class TinsightRateRequest extends TinsightRequestBase {
    */
   protected $events;
 
-
-  public function __construct($live = FALSE, $credentials = []) {
+  /**
+   * Constructor.
+   *
+   * @param bool $live
+   *   Whether the request is against the live or test instance.
+   * @param TinsightCredentialsInterface $credentials
+   *   The T-insight credentials object.
+   */
+  public function __construct($live = FALSE, TinsightCredentialsInterface $credentials) {
     parent::__construct($live, $credentials);
     $this->requestType = 'RateRequest';
   }
@@ -77,6 +84,7 @@ class TinsightRateRequest extends TinsightRequestBase {
   protected function requestBodyXml(\XMLWriter $writer) {
     $writer->startElement('RateRequest');
     $writer->writeAttribute('unitPricing','false');
+    $writer->writeElement('uoneNumber', $this->credentials->getUsername());
 
     $writer->startElement('Constraints');
     $writer->writeElement('Contract');
