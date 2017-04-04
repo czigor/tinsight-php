@@ -10,6 +10,12 @@ use Czigor\Tinsight\TinsightRequestBase;
 class TinsightRateRequest extends TinsightRequestBase {
 
   /**
+   * An array of service flag strings, like 'LG2', 'NOT1' etc.
+   *
+   * @var array
+   */
+  protected $serviceFlags;
+  /**
    * An indexed array of handlingUnit arrays.
    *
    * A handlingUnit array can have the following keys:
@@ -92,9 +98,11 @@ class TinsightRateRequest extends TinsightRequestBase {
     $writer->writeElement('Mode');
 
     $writer->startElement('ServiceFlags');
-    $writer->startElement('ServiceFlag');
-    $writer->writeAttribute('code', 'LIFT');
-    $writer->endElement();
+    foreach ($this->serviceFlags as $service_flag) {
+      $writer->startElement('ServiceFlag');
+      $writer->writeAttribute('code', $service_flag);
+      $writer->endElement();
+    }
     $writer->endElement();
 
     // End Constraints.
@@ -223,6 +231,24 @@ class TinsightRateRequest extends TinsightRequestBase {
    */
   public function setEvents(array $events) {
     $this->events = $events;
+  }
+
+  /**
+   * serviceFlags getter.
+   *
+   * @return array
+   */
+  public function getServiceFlags() {
+    return $this->serviceFlags;
+  }
+
+  /**
+   * serviceFlags setter.
+   *
+   * @param array $service_flags
+   */
+  public function setServiceFlags(array $service_flags) {
+    $this->serviceFlags = $service_flags;
   }
 
 }
