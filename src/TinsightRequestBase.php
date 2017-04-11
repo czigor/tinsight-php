@@ -52,6 +52,19 @@ abstract class TinsightRequestBase {
    */
   protected $sendRequest = TRUE;
 
+  /**
+   * The request XML.
+   *
+   * @var string
+   */
+  protected $requestXML;
+
+  /**
+   * The curl response XML.
+   *
+   * @var string
+   */
+  protected $responseXML;
 
   public function __construct($live = FALSE, TinsightCredentialsInterface $credentials, $request_type = 'rate') {
     $this->live = $live;
@@ -74,7 +87,7 @@ abstract class TinsightRequestBase {
     $writer->endElement();
     $writer->endElement();
     $writer->endDocument();
-    return $writer->flush();
+    $this->requestXML = $writer->flush();
   }
 
   /**
@@ -90,16 +103,16 @@ abstract class TinsightRequestBase {
    * @return mixed
    */
   public function sendRequest() {
-    $xml = $this->requestXml();
+    $this->requestXml();
     if ($this->logger) {
-      $this->logger->info($xml, ['tinsight' => $this->requestType . ' request']);
+      $this->logger->info($this->requestXML, ['tinsight' => $this->requestType . ' request']);
     }
 
     if ($this->sendRequest) {
       $options = [
         CURLOPT_URL => $this->live ? TINSIGHT_LIVE_REQUEST_URL : TINSIGHT_TEST_REQUEST_URL,
         CURLOPT_POST => 1,
-        CURLOPT_POSTFIELDS => $xml,
+        CURLOPT_POSTFIELDS => $this->requestXML,
         CURLOPT_RETURNTRANSFER => TRUE,
         CURLOPT_SSL_VERIFYHOST =>  FALSE,
         CURLOPT_SSL_VERIFYPEER =>  FALSE,
@@ -107,15 +120,13 @@ abstract class TinsightRequestBase {
       $ch = curl_init();
       curl_setopt_array($ch, $options);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/xml'));
-      $output = curl_exec($ch);
+      $this->responseXML = curl_exec($ch);
       $error = curl_error($ch);
       if ($this->logger) {
-        $this->logger->info($output, ['tinsight' => $this->requestType . ' response']);
+        $this->logger->info($this->responseXML, ['tinsight' => $this->requestType . ' response']);
         $this->logger->info($error, ['tinsight' => $this->requestType . ' error response']);
       }
       curl_close($ch);
-
-      return $output;
     }
   }
 
@@ -131,6 +142,20 @@ abstract class TinsightRequestBase {
    */
   public function setSendRequest($send_request) {
     $this->sendRequest = $send_request;
+  }
+
+  /**
+   * Getter for responseXML.
+   */
+  public function getResponseXML() {
+    return $this->responseXML;
+  }
+
+  /**
+   * Getter for requestXML.
+   */
+  public function getRequestXML() {
+    return $this->requestXML;
   }
 
 }
